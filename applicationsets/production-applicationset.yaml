@@ -26,7 +26,7 @@ spec:
       source:
         repoURL: https://github.com/oschusler/applicationsets-demo.git
         targetRevision: HEAD
-        path: "apps/production/{{app}}"
+        path: "environments/production/apps/{{app}}"
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{app}}-production"
