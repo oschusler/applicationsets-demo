@@ -2,18 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- ../../../base/frontend
+- ../../../../base/frontend
 
 namePrefix: prod-
 namespace: frontend-production
 
-commonLabels:
-  environment: production
-  cluster: production
 
 replicas:
-- name: frontend
-  count: 3
+- count: 3
+  name: frontend
 
 patches:
 - patch: |-
@@ -23,3 +20,8 @@ patches:
   target:
     kind: Deployment
     name: frontend
+labels:
+- includeSelectors: true
+  pairs:
+    cluster: production
+    environment: production
