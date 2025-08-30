@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: production-apps
+  namespace: argocd
+spec:
+  generators:
+    # List Generator - explicit control over production deployments
+    - list:
+        elements:
+          - app: frontend
+            replicas: "3"
+            resources: "high"
+          - app: backend
+            replicas: "3"
+            resources: "high"
+  template:
+    metadata:
+      name: "prod-{{app}}"
+      labels:
+        environment: production
+        app: "{{app}}"
+        resources: "{{resources}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/oschusler/applicationsets-demo.git
+        targetRevision: HEAD
+        path: "apps/production/{{app}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{app}}-production"
+      syncPolicy:
+        # No automated sync - production requires manual approval
+        syncOptions:
+          - CreateNamespace=true

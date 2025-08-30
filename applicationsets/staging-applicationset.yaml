@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: staging-apps
+  namespace: argocd
+spec:
+  generators:
+    # Git Directory Generator - automatically discovers staging apps
+    - git:
+        repoURL: https://github.com/oschusler/applicationsets-demo.git
+        revision: HEAD
+        directories:
+          - path: environments/staging/apps/*
+  template:
+    metadata:
+      name: "staging-{{path.basename}}"
+      labels:
+        environment: staging
+        app: "{{path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/oschusler/applicationsets-demo.git
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{path.basename}}-staging"
+      syncPolicy:
+        automated: # Staging auto-syncs
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
