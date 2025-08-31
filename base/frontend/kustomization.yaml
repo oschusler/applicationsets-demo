@@ -5,6 +5,8 @@ resources:
   - deployment.yaml
   - service.yaml
 
-commonLabels:
-  app: frontend
-  tier: ui
+labels:
+  - includeSelectors: true
+    pairs:
+      app: frontend
+      tier: ui

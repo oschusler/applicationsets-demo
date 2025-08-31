@@ -5,6 +5,8 @@ resources:
   - deployment.yaml
   - service.yaml
 
-commonLabels:
-  app: database
-  tier: data
+labels:
+  - includeSelectors: true
+    pairs:
+      app: database
+      tier: data

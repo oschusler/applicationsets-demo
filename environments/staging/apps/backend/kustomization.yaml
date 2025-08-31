@@ -2,25 +2,25 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../../../base/backend
+- ../../../../base/backend
 
 namePrefix: staging-
 namespace: backend-staging
 
 replicas:
-  - count: 2
-    name: backend
+- count: 2
+  name: backend
 
 patches:
-  - patch: |-
-      - op: replace
-        path: /spec/template/spec/containers/0/env/0/value
-        value: staging
-    target:
-      kind: Deployment
-      name: backend
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value
+      value: staging
+  target:
+    kind: Deployment
+    name: backend
 labels:
-  - includeSelectors: true
-    pairs:
-      cluster: staging
-      environment: staging
+- includeSelectors: true
+  pairs:
+    cluster: staging
+    environment: staging
